@@ -12,6 +12,7 @@
 
 .zoom-container {
   background-color: red;
+  position: absolute;
 }
 
 .ls-map {
@@ -25,14 +26,9 @@
     cursor: grabbing;
   }
 
-  .box {
-    width: 100px;
-    height: 100px;
-    background-color: #f0f;
+  .ls-map-object {
     position: absolute;
-    top: 0;
-    left: 0;
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+    overflow: hidden;
   }
 
   // &:active {

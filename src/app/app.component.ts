@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LineStatusComponent } from './components/line-status/line-status.component';
+import { LineStatusComponent } from './line-status/line-status.component';
 
 @Component({
   selector: 'app-root',
