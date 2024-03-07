@@ -1,9 +1,10 @@
-<div class="ls-visor">
+<div class="ls-visor" #visor>
   <div
     class="zoom-container"
     #zoomContainer
     [ngStyle]="{
       'transform': 'matrix(' + zoomLevel + ', 0, 0, ' + zoomLevel + ', 0, 0)',
+      'transform-origin': zoomOrigin.x + 'px ' + zoomOrigin.y + 'px',
       'width': canvasSize.width,
       'height': canvasSize.height
     }"

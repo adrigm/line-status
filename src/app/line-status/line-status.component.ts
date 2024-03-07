@@ -39,6 +39,7 @@ interface MapObject {
 })
 export class LineStatusComponent {
   @ViewChild('zoomContainer') zoomContainer: ElementRef;
+  @ViewChild('visor') visor: ElementRef;
 
   mapObjects: MapObject[] = [
     {
@@ -106,6 +107,11 @@ export class LineStatusComponent {
     }
 
     this.zoomLevel = delta > 0 ? this.zoomLevel - 0.1 : this.zoomLevel + 0.1;
+
+    // Ajusta el origen del zoom basándote en la posición del ratón
+    this.zoomOrigin.x = event.offsetX;
+    this.zoomOrigin.y = event.offsetY;
+    console.log(this.zoomOrigin);
   }
 
   moveObject(event: any) {
@@ -126,6 +132,32 @@ export class LineStatusComponent {
     this.zoomContainer.nativeElement.style.left = `${event.source.getFreeDragPosition().x}px`;
     this.zoomContainer.nativeElement.style.top = `${event.source.getFreeDragPosition().y}px`;
     element.style.transform = `translate(${0}px, ${0}px)`;
+
+    console.log(this.visor.nativeElement.offsetWidth / 2);
+
+    // La parte izquierda del zoomContainer no puede ser mayor al centro del visor y la parte superior no puede ser mayor a la mitad del visor. Usa
+    if (event.source.getFreeDragPosition().x > this.visor.nativeElement.offsetWidth / 2) {
+      this.zoomContainer.nativeElement.style.left = `${this.visor.nativeElement.offsetWidth / 2}px`;
+    }
+    if (event.source.getFreeDragPosition().y > this.visor.nativeElement.offsetHeight / 2) {
+      this.zoomContainer.nativeElement.style.top = `${this.visor.nativeElement.offsetHeight / 2}px`;
+    }
+
+    // if (event.source.getFreeDragPosition().x > 0) {
+    //   this.zoomContainer.nativeElement.style.left = `${0}px`;
+    // }
+    // if (event.source.getFreeDragPosition().y > 0) {
+    //   this.zoomContainer.nativeElement.style.top = `${0}px`;
+    // }
+
+    // if (event.source.getFreeDragPosition().x < this.visor.nativeElement.offsetWidth - this.zoomContainer.nativeElement.offsetWidth) {
+    //   this.zoomContainer.nativeElement.style.left = `${this.visor.nativeElement.offsetWidth - this.zoomContainer.nativeElement.offsetWidth}px`;
+    // }
+    // if (event.source.getFreeDragPosition().y < this.visor.nativeElement.offsetHeight - this.zoomContainer.nativeElement.offsetHeight) {
+    //   this.zoomContainer.nativeElement.style.top = `${this.visor.nativeElement.offsetHeight - this.zoomContainer.nativeElement.offsetHeight}px`;
+    // }
+
+
   }
 
   onDragEnd(event: CdkDragEnd) {
