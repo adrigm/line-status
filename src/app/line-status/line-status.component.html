@@ -1,24 +1,22 @@
 <div class="ls-visor" #visor>
   <div
-    class="zoom-container"
-    #zoomContainer
-    [ngStyle]="{
-      'transform': 'matrix(' + zoomLevel + ', 0, 0, ' + zoomLevel + ', 0, 0)',
-      'transform-origin': zoomOrigin.x + 'px ' + zoomOrigin.y + 'px',
-      'width': canvasSize.width,
-      'height': canvasSize.height
-    }"
-    (wheel)="adjustZoom($event)"
-  >
-    <div
+      #map
       cdkDrag
       class="ls-map"
       (cdkDragMoved)="onDrag($event)"
       (cdkDragEnded)="onDragEnd($event)"
+      (wheel)="adjustZoom($event)"
       (cdkDragStarted)="onDragStart($event)"
       [ngStyle]="{
         'width': canvasSize.width + 'px',
         'height': canvasSize.height + 'px'
+      }"
+    >
+    <div
+      class="zoom-container"
+      #zoomContainer
+      [ngStyle]="{
+        'transform': 'matrix(' + zoomLevel + ', 0, 0, ' + zoomLevel + ', 0, 0)'
       }"
     >
       <app-map-object
