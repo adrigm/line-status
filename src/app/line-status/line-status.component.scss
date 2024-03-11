@@ -11,16 +11,17 @@
 }
 
 .zoom-container {
-  background-color: red;
-  position: absolute;
+  background-color: rgb(170, 152, 152);
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 .ls-map {
   background-color: rgb(68, 140, 198);
   position: relative;
-  cursor: move;
-  left: 0;
-  top: 0;
+  height: 100%;
+  width: 100%;
 
   &:active {
     cursor: grabbing;

@@ -1,47 +1,30 @@
 <div class="ls-visor" #visor>
   <div
-    class="zoom-container"
-    #zoomContainer
-    [ngStyle]="{
-      'transform': 'matrix(' + zoomLevel + ', 0, 0, ' + zoomLevel + ', 0, 0)',
-      'transform-origin': zoomOrigin.x + 'px ' + zoomOrigin.y + 'px',
-      'width': canvasSize.width,
-      'height': canvasSize.height
-    }"
-    (wheel)="adjustZoom($event)"
+    id="map"
+    class="ls-map"
+    #map
   >
-    <div
+    <app-map-object
+      *ngFor="let object of mapObjects"
       cdkDrag
-      class="ls-map"
-      (cdkDragMoved)="onDrag($event)"
-      (cdkDragEnded)="onDragEnd($event)"
-      (cdkDragStarted)="onDragStart($event)"
+      (cdkDragMoved)="onDragMapObject($event, object)"
+      (cdkDragStarted)="onDragStartMapObject($event, object)"
+      (click)="$event.stopPropagation()"
+      cdkDragBoundary=".ls-map"
+      class="ls-map-object"
       [ngStyle]="{
-        'width': canvasSize.width + 'px',
-        'height': canvasSize.height + 'px'
+        'transform': 'translate(' + object.position.x + 'px, ' + object.position.y + 'px) rotate(' + (object.rotation || 0) + 'deg)',
+        'transform-origin': 'center',
+        'width': object.size.width + 'px' || '100px',
+        'height': object.size.height + 'px' || '100px',
+        'background-color': object.backgroundColor || 'transparent',
+        'border-style': object.borderStyle || 'none',
+        'border-color': object.borderColor || 'transparent',
+        'border-width': object.borderWidth || '0px',
+        'border-radius': object.borderRadius || '0px',
       }"
     >
-      <app-map-object
-        *ngFor="let object of mapObjects"
-        cdkDrag
-        (cdkDragMoved)="onDragMapObject($event, object)"
-        (cdkDragStarted)="onDragStartMapObject($event, object)"
-        cdkDragBoundary=".ls-map"
-        class="ls-map-object"
-        [ngStyle]="{
-          'transform': 'translate(' + object.position.x + 'px, ' + object.position.y + 'px) rotate(' + (object.rotation || 0) + 'deg)',
-          'transform-origin': 'center',
-          'width': object.size.width + 'px' || '100px',
-          'height': object.size.height + 'px' || '100px',
-          'background-color': object.backgroundColor || 'transparent',
-          'border-style': object.borderStyle || 'none',
-          'border-color': object.borderColor || 'transparent',
-          'border-width': object.borderWidth || '0px',
-          'border-radius': object.borderRadius || '0px',
-        }"
-      >
-        <div class="box"></div>
-      </app-map-object>
-    </div>
+      <div class="box"></div>
+    </app-map-object>
   </div>
 </div>
