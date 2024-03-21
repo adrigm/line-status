@@ -1,8 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, viewChild } from '@angular/core';
+import { CommonModule, NgForOf } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, viewChild } from '@angular/core';
 import {CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
 import { MapObjectComponent } from './components/map-object/map-object.component';
 import Panzoom from '@panzoom/panzoom'
+import { DisplayGrid, GridType, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponent } from 'angular-gridster2';
 
 interface Point {
   x: number;
@@ -33,14 +34,21 @@ interface MapObject {
     CommonModule,
     CdkDrag,
     MapObjectComponent,
+    NgForOf,
+    GridsterComponent,
+    GridsterItemComponent
   ],
   templateUrl: './line-status.component.html',
   styleUrl: './line-status.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LineStatusComponent implements AfterViewInit {
+export class LineStatusComponent implements AfterViewInit, OnInit {
   @ViewChild('map') map: ElementRef;
   @ViewChild('visor') visor: ElementRef;
+
+  options: GridsterConfig;
+  dashboard: Array<GridsterItem>;
+
 
   mapObjects: MapObject[] = [
     {
@@ -90,10 +98,54 @@ export class LineStatusComponent implements AfterViewInit {
 
   zoomLevel = 1;
   zoomOrigin: Point = { x: 0, y: 0 };
-  canvasSize = { width: 2000, height: 2000 };
+  canvasSize = { width: 10000, height: 10000 };
 
   position = { x: 0, y: 0 };
   adjustedPosition = { x: 0, y: 0 };
+
+  static itemChange(item, itemComponent) {
+    console.info('itemChanged', item, itemComponent);
+  }
+
+  static itemResize(item, itemComponent) {
+    console.info('itemResized', item, itemComponent);
+  }
+
+  ngOnInit() {
+    this.options = {
+      gridType: GridType.Fixed,
+      fixedColWidth: 10,
+      fixedRowHeight: 10,
+      minCols: 100,
+      maxCols: 100,
+      minRows: 10000,
+      maxRows: 10000,
+      displayGrid: DisplayGrid.Always,
+      margin: 0,
+      draggable: { enabled: true },
+      resizable: { enabled: true },
+      minItemCols: 10,
+      minItemRows: 10,
+      swap: false,
+      outerMargin: false,
+
+      allowMultiLayer: true,
+      defaultLayerIndex: 1,
+      maxLayerIndex: 1000,
+      baseLayerIndex: 1,
+
+
+      itemChangeCallback: LineStatusComponent.itemChange,
+      itemResizeCallback: LineStatusComponent.itemResize,
+    };
+
+    this.dashboard = [
+      {cols: 20, rows: 10, y: 0, x: 0, layerIndex: 1, background: 'red'},
+      {cols: 20, rows: 20, y: 0, x: 2, layerIndex: 2, background: 'blue'},
+      {cols: 10, rows: 10, y: 0, x: 4, layerIndex: 3, background: 'green'},
+    ];
+  }
+
 
   ngAfterViewInit(): void {
     const elem = document.getElementById('map')

@@ -3,28 +3,12 @@
     id="map"
     class="ls-map"
     #map
+    [ngStyle]="{'width': canvasSize.width + 'px', 'height': canvasSize.height + 'px'}"
   >
-    <app-map-object
-      *ngFor="let object of mapObjects"
-      cdkDrag
-      (cdkDragMoved)="onDragMapObject($event, object)"
-      (cdkDragStarted)="onDragStartMapObject($event, object)"
-      (click)="$event.stopPropagation()"
-      cdkDragBoundary=".ls-map"
-      class="ls-map-object"
-      [ngStyle]="{
-        'transform': 'translate(' + object.position.x + 'px, ' + object.position.y + 'px) rotate(' + (object.rotation || 0) + 'deg)',
-        'transform-origin': 'center',
-        'width': object.size.width + 'px' || '100px',
-        'height': object.size.height + 'px' || '100px',
-        'background-color': object.backgroundColor || 'transparent',
-        'border-style': object.borderStyle || 'none',
-        'border-color': object.borderColor || 'transparent',
-        'border-width': object.borderWidth || '0px',
-        'border-radius': object.borderRadius || '0px',
-      }"
-    >
-      <div class="box"></div>
-    </app-map-object>
+    <gridster [options]="options">
+      <gridster-item [ngStyle]="{'background': item['background']}" class="ls-map-object" [item]="item" *ngFor="let item of dashboard">
+        <div class="box" ></div>
+      </gridster-item>
+    </gridster>
   </div>
 </div>
